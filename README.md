@@ -1,6 +1,6 @@
 ## Sangria akka-http Example
 
-An example GraphQL server written with akka-http and sangria.
+An example [GraphQL](http://facebook.github.io/graphql/) server written with [akka-http](http://doc.akka.io/docs/akka-stream-and-http-experimental/current/scala/http/) and [sangria](https://github.com/OlegIlyenko/sangria).
 
 After starting the server with
 
