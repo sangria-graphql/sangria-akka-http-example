@@ -19,7 +19,7 @@ $ curl -G localhost:8080/graphql \
     --data-urlencode "query={hero {name, friends {name}}}"
 ```
 
-this give back the hero of StarWars Saga together with his friends, which is of course R2-D2:
+this gives back the hero of StarWars Saga together with the list of his friends, which is of course R2-D2:
 
 ```javascript
 {
