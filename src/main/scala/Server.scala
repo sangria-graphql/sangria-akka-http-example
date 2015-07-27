@@ -35,7 +35,7 @@ object Server extends App {
 
         QueryParser.parse(query) match {
 
-          // query parsed sucessfully, type to execute it
+          // query parsed successfully, time to execute it!
           case Success(queryAst) =>
             complete(executor.execute(queryAst,
               operationName = operation,
