@@ -49,7 +49,7 @@ Here is another example, which uses variables:
 ```bash
 $ curl -G localhost:8080/graphql \
     --data-urlencode "query=query Test(\$humanId: String){human(id: \$humanId) {name, homePlanet, friends {name}}}" \
-    --data-u rlencode 'args={"humanId": "1000"}'
+    --data-urlencode 'args={"humanId": "1000"}'
 ```
 
 The result should be something like this:
