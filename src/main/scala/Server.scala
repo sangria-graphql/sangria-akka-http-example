@@ -42,8 +42,8 @@ object Server extends App {
               arguments = args flatMap (parseOpt(_, true))))
 
           // can't parse GraphQL query, return error
-          case Failure(error: SyntaxError) =>
-            complete(BadRequest, JObject("error" -> JString(error.message)))
+          case Failure(error) =>
+            complete(BadRequest, JObject("error" -> JString(error.getMessage)))
         }
 
       }
