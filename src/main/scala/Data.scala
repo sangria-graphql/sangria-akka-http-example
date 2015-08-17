@@ -40,10 +40,11 @@ case class DeferFriends(friends: List[String]) extends Deferred[List[Option[Char
  * probably want to batch all of the deferred values in one efficient fetch.
  */
 class FriendsResolver extends DeferredResolver {
-  override def resolve(deferred: List[Deferred[Any]]) = Future.fromTry(Try(deferred map {
+  override def resolve(deferred: List[Deferred[Any]]) = deferred map {
     case DeferFriends(friendIds) =>
-      friendIds map (id => CharacterRepo.humans.find(_.id == id) orElse CharacterRepo.droids.find(_.id == id))
-  }))
+      Future.fromTry(Try(
+        friendIds map (id => CharacterRepo.humans.find(_.id == id) orElse CharacterRepo.droids.find(_.id == id))))
+  }
 }
 
 class CharacterRepo {

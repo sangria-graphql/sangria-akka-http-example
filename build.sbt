@@ -7,7 +7,7 @@ scalaVersion := "2.11.7"
 scalacOptions ++= Seq("-deprecation", "-feature")
 
 libraryDependencies ++= Seq(
-  "org.sangria-graphql" %% "sangria" % "0.2.1",
+  "org.sangria-graphql" %% "sangria" % "0.3.0",
   "com.typesafe.akka" %% "akka-http-experimental" % "1.0",
 
   // Use json4s in this example
