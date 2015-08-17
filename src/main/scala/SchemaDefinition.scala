@@ -89,7 +89,7 @@ object SchemaDefinition {
   val EpisodeArg = Argument("episode", OptionInputType(EpisodeEnum),
     description = "If omitted, returns the hero of the whole saga. If provided, returns the hero of that particular episode.")
 
-  val Query = ObjectType[CharacterRepo, Unit](
+  val Query = ObjectType(
     "Query", fields[CharacterRepo, Unit](
       Field("hero", Character,
         arguments = EpisodeArg :: Nil,
