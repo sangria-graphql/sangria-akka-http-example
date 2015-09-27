@@ -12,7 +12,7 @@ import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 
 import sangria.parser.{SyntaxError, QueryParser}
 import sangria.execution.Executor
-import sangria.integration.Json4sSupport._
+import sangria.integration.json4s._
 
 import scala.util.{Success, Failure}
 
@@ -29,25 +29,37 @@ object Server extends App {
     userContext = new CharacterRepo,
     deferredResolver = new FriendsResolver)
 
-  val route: Route =
-    (get & path("graphql")) {
-      parameters('query, 'args.?, 'operation.?) { (query, args, operation) =>
+  import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 
-        QueryParser.parse(query) match {
+val route: Route =
+  (post & path("graphql")) {
+    entity(as[JValue]) { requestJson =>
+      println(requestJson)
 
-          // query parsed successfully, time to execute it!
-          case Success(queryAst) =>
-            complete(executor.execute(queryAst,
-              operationName = operation,
-              arguments = args flatMap (parseOpt(_, true))))
+      val JString(query) = requestJson \ "query"
+      val operation = requestJson \ "operation" match {
+        case JString(op) => Some(op)
+        case JNothing => None
+      }
+      val vars = requestJson \ "variables" match {
+        case JString(s) => parse(s, true)
+        case JNothing => JObject()
+      }
 
-          // can't parse GraphQL query, return error
-          case Failure(error) =>
-            complete(BadRequest, JObject("error" -> JString(error.getMessage)))
-        }
+      QueryParser.parse(query) match {
 
+        // query parsed successfully, time to execute it!
+        case Success(queryAst) =>
+          complete(executor.execute(queryAst,
+            operationName = operation,
+            variables = vars))
+
+        // can't parse GraphQL query, return error
+        case Failure(error) =>
+          complete(BadRequest, JObject("error" -> JString(error.getMessage)))
       }
     }
+  }
 
   Http().bindAndHandle(route, "0.0.0.0", sys.props.get("http.port").fold(8080)(_.toInt))
 }

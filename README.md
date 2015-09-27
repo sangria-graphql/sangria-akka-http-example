@@ -8,17 +8,18 @@ After starting the server with
 
     sbt run
 
-you can query `/graphql` endpoint. It accepts following query string parameters:
+you can query `/graphql` endpoint. It accepts following properties in the JSON body (this follows [relay](https://facebook.github.io/relay) convention):
 
-* `query` - GraphQL query as a string
-* `args` - JSON object that contains variables for your query _(optional)_
-* `operation` - the name of the operation, in case you defined several of them in the query _(optional)_
+* `query` - String - GraphQL query as a string
+* `variables` - String - containing JSON object that defines variables for your query _(optional)_
+* `operation` - String - the name of the operation, in case you defined several of them in the query _(optional)_
 
 Here are some examples of the queries you can make:
 
 ```bash
-$ curl -G localhost:8080/graphql \
-    --data-urlencode "query={hero {name, friends {name}}}"
+$ curl -X POST localhost:8080/graphql \
+    -H "Content-Type:application/json" \
+    -d '{"query": "{hero {name, friends {name}}}"}'
 ```
 
 this gives back the hero of StarWars Saga together with the list of his friends, which is of course R2-D2:
@@ -47,9 +48,9 @@ this gives back the hero of StarWars Saga together with the list of his friends,
 Here is another example, which uses variables:
 
 ```bash
-$ curl -G localhost:8080/graphql \
-    --data-urlencode 'query=query Test($humanId: String!){human(id: $humanId) {name, homePlanet, friends {name}}}' \
-    --data-urlencode 'args={"humanId": "1000"}'
+$ curl -X POST localhost:8080/graphql \
+    -H "Content-Type:application/json" \
+    -d '{"query": "query Test($humanId: String!){human(id: $humanId) {name, home Planet, friends {name}}}", "variables": "{\"humanId\": \"1000\"}"}'
 ```
 
 The result should be something like this:
