@@ -34,8 +34,6 @@ object Server extends App {
 val route: Route =
   (post & path("graphql")) {
     entity(as[JValue]) { requestJson =>
-      println(requestJson)
-
       val JString(query) = requestJson \ "query"
       val operation = requestJson \ "operation" match {
         case JString(op) => Some(op)
