@@ -12,7 +12,7 @@ import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 
 import sangria.parser.{SyntaxError, QueryParser}
 import sangria.execution.Executor
-import sangria.integration.json4s._
+import sangria.integration.json4s.native._
 
 import scala.util.{Success, Failure}
 

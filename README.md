@@ -50,7 +50,7 @@ Here is another example, which uses variables:
 ```bash
 $ curl -X POST localhost:8080/graphql \
     -H "Content-Type:application/json" \
-    -d '{"query": "query Test($humanId: String!){human(id: $humanId) {name, home Planet, friends {name}}}", "variables": "{\"humanId\": \"1000\"}"}'
+    -d '{"query": "query Test($humanId: String!){human(id: $humanId) {name, homePlanet, friends {name}}}", "variables": "{\"humanId\": \"1000\"}"}'
 ```
 
 The result should be something like this:

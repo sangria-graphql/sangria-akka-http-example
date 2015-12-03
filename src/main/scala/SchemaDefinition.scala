@@ -69,7 +69,8 @@ object SchemaDefinition {
     fields[Unit, Droid](
       Field("id", StringType,
         Some("The id of the droid."),
-        resolve = Projection("_id", _.value.id)),
+        tags = ProjectionName("_id") :: Nil,
+        resolve = _.value.id),
       Field("name", OptionType(StringType),
         Some("The name of the droid."),
         resolve = ctx => Future.successful(ctx.value.name)),
@@ -93,7 +94,7 @@ object SchemaDefinition {
     "Query", fields[CharacterRepo, Unit](
       Field("hero", Character,
         arguments = EpisodeArg :: Nil,
-        resolve = (ctx) => ctx.ctx.getHero(ctx.argOpt(EpisodeArg))),
+        resolve = (ctx) => ctx.ctx.getHero(ctx.arg(EpisodeArg))),
       Field("human", OptionType(Human),
         arguments = ID :: Nil,
         resolve = ctx => ctx.ctx.getHuman(ctx arg ID)),
