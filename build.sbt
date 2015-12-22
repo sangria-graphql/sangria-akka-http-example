@@ -8,15 +8,8 @@ scalacOptions ++= Seq("-deprecation", "-feature")
 
 libraryDependencies ++= Seq(
   "org.sangria-graphql" %% "sangria" % "0.5.0",
-  "com.typesafe.akka" %% "akka-http-experimental" % "1.0",
-
-  // Use json4s in this example
-  "org.json4s" %% "json4s-native" % "3.2.11",
-  "de.heikoseeberger" %% "akka-http-json4s" % "1.0.0"
-
-  // you can also use this one, but at the moment it depends
-  // on outdated version of spray-json
-  // "com.typesafe.akka" %% "akka-http-spray-json-experimental" % "1.0"
+  "com.typesafe.akka" %% "akka-http-experimental" % "2.0",
+  "com.typesafe.akka" %% "akka-http-spray-json-experimental" % "2.0"
 )
 
 Revolver.settings

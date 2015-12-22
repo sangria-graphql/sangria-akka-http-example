@@ -5,22 +5,19 @@ import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server._
 import akka.stream.ActorMaterializer
 
-import org.json4s.native.JsonMethods._
-import org.json4s._
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 
-import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
-
-import sangria.parser.{SyntaxError, QueryParser}
+import sangria.parser.QueryParser
 import sangria.execution.Executor
-import sangria.integration.json4s.native._
+import sangria.integration.sprayJson._
+
+import spray.json._
 
 import scala.util.{Success, Failure}
 
 object Server extends App {
   implicit val system = ActorSystem("sangria-server")
   implicit val materializer = ActorMaterializer()
-  implicit val serialization = native.Serialization
-  implicit val formats = DefaultFormats
 
   import system.dispatcher
 
@@ -29,19 +26,21 @@ object Server extends App {
     userContext = new CharacterRepo,
     deferredResolver = new FriendsResolver)
 
-  import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
-
 val route: Route =
   (post & path("graphql")) {
-    entity(as[JValue]) { requestJson =>
-      val JString(query) = requestJson \ "query"
-      val operation = requestJson \ "operation" match {
-        case JString(op) => Some(op)
-        case JNothing => None
+    entity(as[JsValue]) { requestJson =>
+      val JsObject(fields) = requestJson
+
+      val JsString(query) = fields("query")
+
+      val operation = fields.get("operation") collect {
+        case JsString(op) => op
       }
-      val vars = requestJson \ "variables" match {
-        case JString(s) => parse(s, true)
-        case JNothing => JObject()
+
+      val vars = fields.get("variables") match {
+        case Some(obj: JsObject) => obj
+        case Some(JsString(s)) => s.parseJson
+        case _ => JsObject.empty
       }
 
       QueryParser.parse(query) match {
@@ -54,7 +53,7 @@ val route: Route =
 
         // can't parse GraphQL query, return error
         case Failure(error) =>
-          complete(BadRequest, JObject("error" -> JString(error.getMessage)))
+          complete(BadRequest, JsObject("error" -> JsString(error.getMessage)))
       }
     }
   }
