@@ -9,7 +9,7 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 
 import sangria.parser.QueryParser
 import sangria.execution.Executor
-import sangria.integration.sprayJson._
+import sangria.marshalling.sprayJson._
 
 import spray.json._
 
