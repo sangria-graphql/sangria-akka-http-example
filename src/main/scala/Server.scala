@@ -27,6 +27,9 @@ object Server extends App {
     deferredResolver = new FriendsResolver)
 
 val route: Route =
+  get {
+    getFromResource("graphiql.html")
+  } ~
   (post & path("graphql")) {
     entity(as[JsValue]) { requestJson =>
       val JsObject(fields) = requestJson

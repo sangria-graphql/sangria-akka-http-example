@@ -8,7 +8,7 @@ After starting the server with
 
     sbt run
 
-you can query `/graphql` endpoint. It accepts following properties in the JSON body (this follows [relay](https://facebook.github.io/relay) convention):
+you can run queries interactively using [GraphiQL](https://github.com/graphql/graphiql) by opening http://localhost:8080 in a browser or query the `/graphql` endpoint. It accepts following properties in the JSON body (this follows [relay](https://facebook.github.io/relay) convention):
 
 * `query` - String - GraphQL query as a string
 * `variables` - String - containing JSON object that defines variables for your query _(optional)_
