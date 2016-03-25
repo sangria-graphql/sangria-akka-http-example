@@ -28,7 +28,7 @@ object Server extends App {
 
         val JsString(query) = fields("query")
 
-        val operation = fields.get("operation") collect {
+        val operation = fields.get("operationName") collect {
           case JsString(op) ⇒ op
         }
 

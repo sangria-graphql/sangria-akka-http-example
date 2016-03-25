@@ -12,7 +12,7 @@ you can run queries interactively using [GraphiQL](https://github.com/graphql/gr
 
 * `query` - String - GraphQL query as a string
 * `variables` - String - containing JSON object that defines variables for your query _(optional)_
-* `operation` - String - the name of the operation, in case you defined several of them in the query _(optional)_
+* `operationName` - String - the name of the operation, in case you defined several of them in the query _(optional)_
 
 Here are some examples of the queries you can make:
 

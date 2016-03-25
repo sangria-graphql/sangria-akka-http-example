@@ -36,16 +36,21 @@
         width: 100%;
         overflow: hidden;
       }
+
+      #graphiql {
+        height: 100vh;
+      }
     </style>
 
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/graphiql/0.6.3/graphiql.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/graphiql/0.6.6/graphiql.css" />
     <script src="//cdn.jsdelivr.net/fetch/0.9.0/fetch.min.js"></script>
     <script src="//cdn.jsdelivr.net/react/0.14.7/react.min.js"></script>
     <script src="//cdn.jsdelivr.net/react/0.14.7/react-dom.min.js"></script>
-    <script src="//cdn.jsdelivr.net/graphiql/0.6.3/graphiql.min.js"></script>
+    <script src="//cdn.jsdelivr.net/graphiql/0.6.6/graphiql.min.js"></script>
   </head>
   <body>
-    Loading...
+    <div id="graphiql">Loading...</div>
+
     <script>
 
       /**
@@ -129,7 +134,7 @@
           onEditQuery: onEditQuery,
           onEditVariables: onEditVariables
         }),
-        document.body
+          document.getElementById('graphiql')
       );
     </script>
   </body>
