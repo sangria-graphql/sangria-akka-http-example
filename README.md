@@ -1,6 +1,6 @@
 ## Sangria akka-http Example
 
-An example [GraphQL](http://facebook.github.io/graphql/) server written with [akka-http](http://doc.akka.io/docs/akka-stream-and-http-experimental/current/scala/http/) and [sangria](https://github.com/OlegIlyenko/sangria).
+An example [GraphQL](http://facebook.github.io/graphql/) server written with [akka-http](https://github.com/akka/akka-http) and [sangria](https://github.com/OlegIlyenko/sangria).
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
@@ -11,7 +11,7 @@ After starting the server with
 you can run queries interactively using [GraphiQL](https://github.com/graphql/graphiql) by opening http://localhost:8080 in a browser or query the `/graphql` endpoint. It accepts following properties in the JSON body (this follows [relay](https://facebook.github.io/relay) convention):
 
 * `query` - String - GraphQL query as a string
-* `variables` - String - containing JSON object that defines variables for your query _(optional)_
+* `variables` - Object or String containing a JSON object that defines variables for your query _(optional)_
 * `operationName` - String - the name of the operation, in case you defined several of them in the query _(optional)_
 
 Here are some examples of the queries you can make:
@@ -50,7 +50,7 @@ Here is another example, which uses variables:
 ```bash
 $ curl -X POST localhost:8080/graphql \
     -H "Content-Type:application/json" \
-    -d '{"query": "query Test($humanId: String!){human(id: $humanId) {name, homePlanet, friends {name}}}", "variables": "{\"humanId\": \"1000\"}"}'
+    -d '{"query": "query Test($humanId: String!){human(id: $humanId) {name, homePlanet, friends {name}}}", "variables": {"humanId": "1000"}}'
 ```
 
 The result should be something like this:
