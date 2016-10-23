@@ -103,6 +103,7 @@ object SchemaDefinition {
     "Query", fields[CharacterRepo, Unit](
       Field("hero", Character,
         arguments = EpisodeArg :: Nil,
+        deprecationReason = Some("Use `human` or `droid` fields instead"),
         resolve = (ctx) ⇒ ctx.ctx.getHero(ctx.arg(EpisodeArg))),
       Field("human", OptionType(Human),
         arguments = ID :: Nil,
