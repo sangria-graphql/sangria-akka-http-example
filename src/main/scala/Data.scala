@@ -1,8 +1,3 @@
-import sangria.execution.deferred.{Deferred, DeferredResolver}
-
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
-
 object Episode extends Enumeration {
   val NEWHOPE, EMPIRE, JEDI = Value
 }
