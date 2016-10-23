@@ -52,7 +52,7 @@ object Server extends App {
 
           // can't parse GraphQL query, return error
           case Failure(error) ⇒
-            complete(BadRequest, JsObject("error" -> JsString(error.getMessage)))
+            complete(BadRequest, JsObject("error" → JsString(error.getMessage)))
         }
       }
     } ~
