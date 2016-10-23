@@ -1,6 +1,6 @@
-import sangria.schema.{DeferredResolver, Deferred}
+import sangria.execution.deferred.{Deferred, DeferredResolver}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
 object Episode extends Enumeration {
@@ -40,7 +40,7 @@ case class DeferFriends(friends: List[String]) extends Deferred[List[Option[Char
  * probably want to batch all of the deferred values in one efficient fetch.
  */
 class FriendsResolver extends DeferredResolver[Any] {
-  override def resolve(deferred: Vector[Deferred[Any]], ctx: Any) = deferred map {
+  override def resolve(deferred: Vector[Deferred[Any]], ctx: Any, queryState: Any)(implicit ec: ExecutionContext) = deferred map {
     case DeferFriends(friendIds) =>
       Future.fromTry(Try(
         friendIds map (id => CharacterRepo.humans.find(_.id == id) orElse CharacterRepo.droids.find(_.id == id))))
