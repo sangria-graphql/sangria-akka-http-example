@@ -4,16 +4,14 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server._
 import akka.stream.ActorMaterializer
-
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-
+import sangria.execution.deferred.DeferredResolver
 import sangria.parser.QueryParser
-import sangria.execution.{ErrorWithResolver, QueryAnalysisError, Executor}
+import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError}
 import sangria.marshalling.sprayJson._
-
 import spray.json._
 
-import scala.util.{Success, Failure}
+import scala.util.{Failure, Success}
 
 object Server extends App {
   implicit val system = ActorSystem("sangria-server")
@@ -45,7 +43,7 @@ object Server extends App {
             complete(Executor.execute(SchemaDefinition.StarWarsSchema, queryAst, new CharacterRepo,
                 variables = vars,
                 operationName = operation,
-                deferredResolver = new FriendsResolver)
+                deferredResolver = DeferredResolver.fetchers(SchemaDefinition.characters))
               .map(OK → _)
               .recover {
                 case error: QueryAnalysisError ⇒ BadRequest → error.resolveError
