@@ -32,7 +32,6 @@ object Server extends App {
 
         val vars = fields.get("variables") match {
           case Some(obj: JsObject) ⇒ obj
-          case Some(JsString(s)) if s.trim.nonEmpty ⇒ s.parseJson
           case _ ⇒ JsObject.empty
         }
 
