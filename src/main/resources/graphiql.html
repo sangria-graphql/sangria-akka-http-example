@@ -30,7 +30,7 @@
 <html>
   <head>
     <style>
-      html, body {
+      body {
         height: 100%;
         margin: 0;
         width: 100%;
@@ -42,14 +42,16 @@
       }
     </style>
 
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/graphiql/0.7.8/graphiql.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/graphiql/0.8.0/graphiql.css" />
+    <script src="//cdn.jsdelivr.net/es6-promise/4.0.5/es6-promise.auto.min.js"></script>
     <script src="//cdn.jsdelivr.net/fetch/0.9.0/fetch.min.js"></script>
-    <script src="//cdn.jsdelivr.net/react/15.0.1/react.min.js"></script>
-    <script src="//cdn.jsdelivr.net/react/15.0.1/react-dom.min.js"></script>
-    <script src="//cdn.jsdelivr.net/graphiql/0.7.8/graphiql.min.js"></script>
+    <script src="//cdn.jsdelivr.net/react/15.3.2/react.min.js"></script>
+    <script src="//cdn.jsdelivr.net/react/15.3.2/react-dom.min.js"></script>
+    <script src="//cdn.jsdelivr.net/graphiql/0.8.0/graphiql.min.js"></script>
   </head>
   <body>
     <div id="graphiql">Loading...</div>
+
     <script>
 
       /**
@@ -112,7 +114,7 @@
 
       // Defines a GraphQL fetcher using the fetch API.
       function graphQLFetcher(graphQLParams) {
-        return fetch(window.location.origin + "/graphql", {
+        return fetch('/graphql', {
           method: 'post',
           headers: {
             'Accept': 'application/json',
