@@ -1,15 +1,19 @@
 import org.scalatest.{Matchers, WordSpec}
-import SchemaDefinition.StarWarsSchema
+
 import sangria.ast.Document
+import sangria.macros._
+import sangria.execution.Executor
+import sangria.execution.deferred.DeferredResolver
+import sangria.marshalling.circe._
+
+import io.circe._
+import io.circe.parser._
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
-import sangria.macros._
-import sangria.execution.Executor
-import sangria.execution.deferred.DeferredResolver
-import sangria.marshalling.sprayJson._
-import spray.json._
+
+import SchemaDefinition.StarWarsSchema
 
 class SchemaSpec extends WordSpec with Matchers {
   "StartWars Schema" should {
@@ -23,7 +27,7 @@ class SchemaSpec extends WordSpec with Matchers {
          }
        """
 
-      executeQuery(query) should be (
+      executeQuery(query) should be (parse(
         """
          {
            "data": {
@@ -32,7 +36,7 @@ class SchemaSpec extends WordSpec with Matchers {
              }
            }
          }
-       """.parseJson)
+       """).right.get)
     }
 
     "allow to fetch Han Solo using his ID provided through variables" in {
@@ -49,7 +53,7 @@ class SchemaSpec extends WordSpec with Matchers {
          }
        """
 
-      executeQuery(query, vars = JsObject("humanId" → JsString("1002"))) should be (
+      executeQuery(query, vars = Json.obj("humanId" → Json.fromString("1002"))) should be (parse(
         """
          {
            "data": {
@@ -72,11 +76,11 @@ class SchemaSpec extends WordSpec with Matchers {
              }
            }
          }
-        """.parseJson)
+        """).right.get)
     }
   }
 
-  def executeQuery(query: Document, vars: JsObject = JsObject.empty) = {
+  def executeQuery(query: Document, vars: Json = Json.obj()) = {
     val futureResult = Executor.execute(StarWarsSchema, query,
       variables = vars,
       userContext = new CharacterRepo,

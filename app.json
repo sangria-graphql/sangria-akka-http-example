@@ -2,6 +2,6 @@
   "name": "Sangria akka-http Example",
   "description": "An example GraphQL server written with akka-http and sangria.",
   "repository": "https://github.com/sangria-graphql/sangria-akka-http-example",
-  "logo": "https://raw.githubusercontent.com/OlegIlyenko/sangria/master/logo/sangria-icon.png",
+  "logo": "https://raw.githubusercontent.com/sangria-graphql/sangria-logo/master/sangria-icon.png",
   "keywords": ["scala", "sangria", "graphql"]
 }
