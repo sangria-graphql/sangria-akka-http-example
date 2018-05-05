@@ -110,7 +110,13 @@ object SchemaDefinition {
         resolve = ctx ⇒ ctx.ctx.getHuman(ctx arg ID)),
       Field("droid", Droid,
         arguments = ID :: Nil,
-        resolve = Projector((ctx, f) ⇒ ctx.ctx.getDroid(ctx arg ID).get))
+        resolve = Projector((ctx, f) ⇒ ctx.ctx.getDroid(ctx arg ID).get)),
+      Field("humans", ListType(Human),
+        arguments = Nil,
+        resolve = Projector((ctx, f) ⇒ ctx.ctx.getHumans())),
+      Field("droids", ListType(Droid),
+        arguments = Nil,
+        resolve = Projector((ctx, f) ⇒ ctx.ctx.getDroids()))
     ))
 
   val StarWarsSchema = Schema(Query)
