@@ -32,6 +32,10 @@ class CharacterRepo {
   def getHuman(id: String): Option[Human] = humans.find(c ⇒ c.id == id)
 
   def getDroid(id: String): Option[Droid] = droids.find(c ⇒ c.id == id)
+  
+  def getHumans(): List[Human] = humans
+  
+  def getDroids(): List[Droid] = droids
 }
 
 object CharacterRepo {
