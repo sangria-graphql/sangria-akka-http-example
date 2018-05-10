@@ -78,7 +78,6 @@ object SchemaDefinition {
     fields[CharacterRepo, Droid](
       Field("id", StringType,
         Some("The id of the droid."),
-        tags = ProjectionName("_id") :: Nil,
         resolve = _.value.id),
       Field("name", OptionType(StringType),
         Some("The name of the droid."),
@@ -99,6 +98,9 @@ object SchemaDefinition {
   val EpisodeArg = Argument("episode", OptionInputType(EpisodeEnum),
     description = "If omitted, returns the hero of the whole saga. If provided, returns the hero of that particular episode.")
 
+  val LimitArg = Argument("limit", OptionInputType(IntType), defaultValue = 20)
+  val OffsetArg = Argument("offset", OptionInputType(IntType), defaultValue = 0)
+
   val Query = ObjectType(
     "Query", fields[CharacterRepo, Unit](
       Field("hero", Character,
@@ -110,13 +112,13 @@ object SchemaDefinition {
         resolve = ctx ⇒ ctx.ctx.getHuman(ctx arg ID)),
       Field("droid", Droid,
         arguments = ID :: Nil,
-        resolve = Projector((ctx, f) ⇒ ctx.ctx.getDroid(ctx arg ID).get)),
+        resolve = ctx ⇒ ctx.ctx.getDroid(ctx arg ID).get),
       Field("humans", ListType(Human),
-        arguments = Nil,
-        resolve = Projector((ctx, f) ⇒ ctx.ctx.getHumans())),
+        arguments = LimitArg :: OffsetArg :: Nil,
+        resolve = ctx ⇒ ctx.ctx.getHumans(ctx arg LimitArg, ctx arg OffsetArg)),
       Field("droids", ListType(Droid),
-        arguments = Nil,
-        resolve = Projector((ctx, f) ⇒ ctx.ctx.getDroids()))
+        arguments = LimitArg :: OffsetArg :: Nil,
+        resolve = ctx ⇒ ctx.ctx.getDroids(ctx arg LimitArg, ctx arg OffsetArg))
     ))
 
   val StarWarsSchema = Schema(Query)

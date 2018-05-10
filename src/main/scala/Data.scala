@@ -33,9 +33,9 @@ class CharacterRepo {
 
   def getDroid(id: String): Option[Droid] = droids.find(c ⇒ c.id == id)
   
-  def getHumans(): List[Human] = humans
+  def getHumans(limit: Int, offset: Int): List[Human] = humans.drop(offset).take(limit)
   
-  def getDroids(): List[Droid] = droids
+  def getDroids(limit: Int, offset: Int): List[Droid] = droids.drop(offset).take(limit)
 }
 
 object CharacterRepo {
