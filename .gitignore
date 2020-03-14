@@ -5,6 +5,12 @@
 .idea
 .idea_modules
 
+# bloop
+.bloop
+
+# metals
+.metals
+
 # sbt specific
 dist/*
 target/
