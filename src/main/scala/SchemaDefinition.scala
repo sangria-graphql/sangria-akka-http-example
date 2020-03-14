@@ -11,11 +11,19 @@ object SchemaDefinition {
     * Resolves the lists of characters. These resolutions are batched and
     * cached for the duration of a query.
     */
-  val characters = Fetcher.caching(
+  val characters: Fetcher[
+                    CharacterRepo,
+                    Character
+                      with Product
+                      with Serializable,
+                    Character
+                      with Product
+                      with Serializable,
+                    String] = Fetcher.caching(
     (ctx: CharacterRepo, ids: Seq[String]) ⇒
       Future.successful(ids.flatMap(id ⇒ ctx.getHuman(id) orElse ctx.getDroid(id))))(HasId(_.id))
 
-  val EpisodeEnum = EnumType(
+  val EpisodeEnum: EnumType[Episode.Value] = EnumType(
     "Episode",
     Some("One of the films in the Star Wars Trilogy"),
     List(
@@ -48,7 +56,7 @@ object SchemaDefinition {
           resolve = _.value.appearsIn map (e ⇒ Some(e)))
       ))
 
-  val Human =
+  val Human: ObjectType[CharacterRepo, Human] =
     ObjectType(
       "Human",
       "A humanoid creature in the Star Wars universe.",
@@ -71,7 +79,7 @@ object SchemaDefinition {
           resolve = _.value.homePlanet)
       ))
 
-  val Droid = ObjectType(
+  val Droid: ObjectType[CharacterRepo, Droid] = ObjectType(
     "Droid",
     "A mechanical creature in the Star Wars universe.",
     interfaces[CharacterRepo, Droid](Character),
@@ -93,15 +101,15 @@ object SchemaDefinition {
         resolve = _.value.primaryFunction)
     ))
 
-  val ID = Argument("id", StringType, description = "id of the character")
+  val ID: Argument[String] = Argument("id", StringType, description = "id of the character")
 
-  val EpisodeArg = Argument("episode", OptionInputType(EpisodeEnum),
+  val EpisodeArg: Argument[Option[Episode.Value]] = Argument("episode", OptionInputType(EpisodeEnum),
     description = "If omitted, returns the hero of the whole saga. If provided, returns the hero of that particular episode.")
 
-  val LimitArg = Argument("limit", OptionInputType(IntType), defaultValue = 20)
-  val OffsetArg = Argument("offset", OptionInputType(IntType), defaultValue = 0)
+  val LimitArg: Argument[Int] = Argument("limit", OptionInputType(IntType), defaultValue = 20)
+  val OffsetArg: Argument[Int] = Argument("offset", OptionInputType(IntType), defaultValue = 0)
 
-  val Query = ObjectType(
+  val Query: ObjectType[CharacterRepo, Unit] = ObjectType(
     "Query", fields[CharacterRepo, Unit](
       Field("hero", Character,
         arguments = EpisodeArg :: Nil,
@@ -121,5 +129,5 @@ object SchemaDefinition {
         resolve = ctx ⇒ ctx.ctx.getDroids(ctx arg LimitArg, ctx arg OffsetArg))
     ))
 
-  val StarWarsSchema = Schema(Query)
+  val StarWarsSchema: Schema[CharacterRepo, Unit] = Schema(Query)
 }

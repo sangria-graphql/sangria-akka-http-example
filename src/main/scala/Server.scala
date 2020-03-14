@@ -22,8 +22,8 @@ import GraphQLRequestUnmarshaller._
 import sangria.slowlog.SlowLog
 
 object Server extends App with CorsSupport {
-  implicit val system = ActorSystem("sangria-server")
-  implicit val materializer = ActorMaterializer()
+  implicit val system: ActorSystem = ActorSystem("sangria-server")
+  implicit val materializer: ActorMaterializer = ActorMaterializer()
 
   import system.dispatcher
 
