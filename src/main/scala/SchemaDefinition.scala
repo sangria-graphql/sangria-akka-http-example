@@ -12,8 +12,8 @@ object SchemaDefinition {
     * cached for the duration of a query.
     */
   val characters = Fetcher.caching(
-    (ctx: CharacterRepo, ids: Seq[String]) ⇒
-      Future.successful(ids.flatMap(id ⇒ ctx.getHuman(id) orElse ctx.getDroid(id))))(HasId(_.id))
+    (ctx: CharacterRepo, ids: Seq[String]) =>
+      Future.successful(ids.flatMap(id => ctx.getHuman(id) orElse ctx.getDroid(id))))(HasId(_.id))
 
   val EpisodeEnum = EnumType(
     "Episode",
@@ -33,7 +33,7 @@ object SchemaDefinition {
     InterfaceType(
       "Character",
       "A character in the Star Wars Trilogy",
-      () ⇒ fields[CharacterRepo, Character](
+      () => fields[CharacterRepo, Character](
         Field("id", StringType,
           Some("The id of the character."),
           resolve = _.value.id),
@@ -42,10 +42,10 @@ object SchemaDefinition {
           resolve = _.value.name),
         Field("friends", ListType(Character),
           Some("The friends of the character, or an empty list if they have none."),
-          resolve = ctx ⇒ characters.deferSeqOpt(ctx.value.friends)),
+          resolve = ctx => characters.deferSeqOpt(ctx.value.friends)),
         Field("appearsIn", OptionType(ListType(OptionType(EpisodeEnum))),
           Some("Which movies they appear in."),
-          resolve = _.value.appearsIn map (e ⇒ Some(e)))
+          resolve = _.value.appearsIn map (e => Some(e)))
       ))
 
   val Human =
@@ -62,10 +62,10 @@ object SchemaDefinition {
           resolve = _.value.name),
         Field("friends", ListType(Character),
           Some("The friends of the human, or an empty list if they have none."),
-          resolve = ctx ⇒ characters.deferSeqOpt(ctx.value.friends)),
+          resolve = ctx => characters.deferSeqOpt(ctx.value.friends)),
         Field("appearsIn", OptionType(ListType(OptionType(EpisodeEnum))),
           Some("Which movies they appear in."),
-          resolve = _.value.appearsIn map (e ⇒ Some(e))),
+          resolve = _.value.appearsIn map (e => Some(e))),
         Field("homePlanet", OptionType(StringType),
           Some("The home planet of the human, or null if unknown."),
           resolve = _.value.homePlanet)
@@ -81,13 +81,13 @@ object SchemaDefinition {
         resolve = _.value.id),
       Field("name", OptionType(StringType),
         Some("The name of the droid."),
-        resolve = ctx ⇒ Future.successful(ctx.value.name)),
+        resolve = ctx => Future.successful(ctx.value.name)),
       Field("friends", ListType(Character),
         Some("The friends of the droid, or an empty list if they have none."),
-        resolve = ctx ⇒ characters.deferSeqOpt(ctx.value.friends)),
+        resolve = ctx => characters.deferSeqOpt(ctx.value.friends)),
       Field("appearsIn", OptionType(ListType(OptionType(EpisodeEnum))),
         Some("Which movies they appear in."),
-        resolve = _.value.appearsIn map (e ⇒ Some(e))),
+        resolve = _.value.appearsIn map (e => Some(e))),
       Field("primaryFunction", OptionType(StringType),
         Some("The primary function of the droid."),
         resolve = _.value.primaryFunction)
@@ -106,19 +106,19 @@ object SchemaDefinition {
       Field("hero", Character,
         arguments = EpisodeArg :: Nil,
         deprecationReason = Some("Use `human` or `droid` fields instead"),
-        resolve = (ctx) ⇒ ctx.ctx.getHero(ctx.arg(EpisodeArg))),
+        resolve = (ctx) => ctx.ctx.getHero(ctx.arg(EpisodeArg))),
       Field("human", OptionType(Human),
         arguments = ID :: Nil,
-        resolve = ctx ⇒ ctx.ctx.getHuman(ctx arg ID)),
+        resolve = ctx => ctx.ctx.getHuman(ctx arg ID)),
       Field("droid", Droid,
         arguments = ID :: Nil,
-        resolve = ctx ⇒ ctx.ctx.getDroid(ctx arg ID).get),
+        resolve = ctx => ctx.ctx.getDroid(ctx arg ID).get),
       Field("humans", ListType(Human),
         arguments = LimitArg :: OffsetArg :: Nil,
-        resolve = ctx ⇒ ctx.ctx.getHumans(ctx arg LimitArg, ctx arg OffsetArg)),
+        resolve = ctx => ctx.ctx.getHumans(ctx arg LimitArg, ctx arg OffsetArg)),
       Field("droids", ListType(Droid),
         arguments = LimitArg :: OffsetArg :: Nil,
-        resolve = ctx ⇒ ctx.ctx.getDroids(ctx arg LimitArg, ctx arg OffsetArg))
+        resolve = ctx => ctx.ctx.getDroids(ctx arg LimitArg, ctx arg OffsetArg))
     ))
 
   val StarWarsSchema = Schema(Query)

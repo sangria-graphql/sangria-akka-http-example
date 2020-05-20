@@ -53,7 +53,7 @@ class SchemaSpec extends WordSpec with Matchers {
          }
        """
 
-      executeQuery(query, vars = Json.obj("humanId" → Json.fromString("1002"))) should be (parse(
+      executeQuery(query, vars = Json.obj("humanId" -> Json.fromString("1002"))) should be (parse(
         """
          {
            "data": {
