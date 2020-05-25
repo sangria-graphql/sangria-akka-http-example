@@ -33,71 +33,71 @@ object Server extends App with CorsSupport {
       operationName = operationName,
       middleware = if (tracing) SlowLog.apolloTracing :: Nil else Nil,
       deferredResolver = DeferredResolver.fetchers(SchemaDefinition.characters))
-        .map(OK → _)
+        .map(OK -> _)
         .recover {
-          case error: QueryAnalysisError ⇒ BadRequest → error.resolveError
-          case error: ErrorWithResolver ⇒ InternalServerError → error.resolveError
+          case error: QueryAnalysisError => BadRequest -> error.resolveError
+          case error: ErrorWithResolver => InternalServerError -> error.resolveError
         })
 
   def formatError(error: Throwable): Json = error match {
-    case syntaxError: SyntaxError ⇒
-      Json.obj("errors" → Json.arr(
+    case syntaxError: SyntaxError =>
+      Json.obj("errors" -> Json.arr(
       Json.obj(
-        "message" → Json.fromString(syntaxError.getMessage),
-        "locations" → Json.arr(Json.obj(
-          "line" → Json.fromBigInt(syntaxError.originalError.position.line),
-          "column" → Json.fromBigInt(syntaxError.originalError.position.column))))))
-    case NonFatal(e) ⇒
+        "message" -> Json.fromString(syntaxError.getMessage),
+        "locations" -> Json.arr(Json.obj(
+          "line" -> Json.fromBigInt(syntaxError.originalError.position.line),
+          "column" -> Json.fromBigInt(syntaxError.originalError.position.column))))))
+    case NonFatal(e) =>
       formatError(e.getMessage)
-    case e ⇒
+    case e =>
       throw e
   }
 
   def formatError(message: String): Json =
-    Json.obj("errors" → Json.arr(Json.obj("message" → Json.fromString(message))))
+    Json.obj("errors" -> Json.arr(Json.obj("message" -> Json.fromString(message))))
 
   val route: Route =
-    optionalHeaderValueByName("X-Apollo-Tracing") { tracing ⇒
+    optionalHeaderValueByName("X-Apollo-Tracing") { tracing =>
       path("graphql") {
         get {
           explicitlyAccepts(`text/html`) {
             getFromResource("assets/playground.html")
           } ~
-          parameters('query, 'operationName.?, 'variables.?) { (query, operationName, variables) ⇒
+          parameters('query, 'operationName.?, 'variables.?) { (query, operationName, variables) =>
             QueryParser.parse(query) match {
-              case Success(ast) ⇒
+              case Success(ast) =>
                 variables.map(parse) match {
-                  case Some(Left(error)) ⇒ complete(BadRequest, formatError(error))
-                  case Some(Right(json)) ⇒ executeGraphQL(ast, operationName, json, tracing.isDefined)
-                  case None ⇒ executeGraphQL(ast, operationName, Json.obj(), tracing.isDefined)
+                  case Some(Left(error)) => complete(BadRequest, formatError(error))
+                  case Some(Right(json)) => executeGraphQL(ast, operationName, json, tracing.isDefined)
+                  case None => executeGraphQL(ast, operationName, Json.obj(), tracing.isDefined)
                 }
-              case Failure(error) ⇒ complete(BadRequest, formatError(error))
+              case Failure(error) => complete(BadRequest, formatError(error))
             }
           }
         } ~
         post {
-          parameters('query.?, 'operationName.?, 'variables.?) { (queryParam, operationNameParam, variablesParam) ⇒
-            entity(as[Json]) { body ⇒
+          parameters('query.?, 'operationName.?, 'variables.?) { (queryParam, operationNameParam, variablesParam) =>
+            entity(as[Json]) { body =>
               val query = queryParam orElse root.query.string.getOption(body)
               val operationName = operationNameParam orElse root.operationName.string.getOption(body)
               val variablesStr = variablesParam orElse root.variables.string.getOption(body)
 
               query.map(QueryParser.parse(_)) match {
-                case Some(Success(ast)) ⇒
+                case Some(Success(ast)) =>
                   variablesStr.map(parse) match {
-                    case Some(Left(error)) ⇒ complete(BadRequest, formatError(error))
-                    case Some(Right(json)) ⇒ executeGraphQL(ast, operationName, json, tracing.isDefined)
-                    case None ⇒ executeGraphQL(ast, operationName, root.variables.json.getOption(body) getOrElse Json.obj(), tracing.isDefined)
+                    case Some(Left(error)) => complete(BadRequest, formatError(error))
+                    case Some(Right(json)) => executeGraphQL(ast, operationName, json, tracing.isDefined)
+                    case None => executeGraphQL(ast, operationName, root.variables.json.getOption(body) getOrElse Json.obj(), tracing.isDefined)
                   }
-                case Some(Failure(error)) ⇒ complete(BadRequest, formatError(error))
-                case None ⇒ complete(BadRequest, formatError("No query to execute"))
+                case Some(Failure(error)) => complete(BadRequest, formatError(error))
+                case None => complete(BadRequest, formatError("No query to execute"))
               }
             } ~
-            entity(as[Document]) { document ⇒
+            entity(as[Document]) { document =>
               variablesParam.map(parse) match {
-                case Some(Left(error)) ⇒ complete(BadRequest, formatError(error))
-                case Some(Right(json)) ⇒ executeGraphQL(document, operationNameParam, json, tracing.isDefined)
-                case None ⇒ executeGraphQL(document, operationNameParam, Json.obj(), tracing.isDefined)
+                case Some(Left(error)) => complete(BadRequest, formatError(error))
+                case Some(Right(json)) => executeGraphQL(document, operationNameParam, json, tracing.isDefined)
+                case None => executeGraphQL(document, operationNameParam, Json.obj(), tracing.isDefined)
               }
             }
           }
