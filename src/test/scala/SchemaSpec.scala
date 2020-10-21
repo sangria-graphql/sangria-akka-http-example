@@ -36,7 +36,7 @@ class SchemaSpec extends WordSpec with Matchers {
              }
            }
          }
-       """).right.get)
+       """).getOrElse(fail("Failed to parse expected JSON. Please confirm the JSON is valid.")))
     }
 
     "allow to fetch Han Solo using his ID provided through variables" in {
@@ -76,7 +76,7 @@ class SchemaSpec extends WordSpec with Matchers {
              }
            }
          }
-        """).right.get)
+        """).getOrElse(fail("Failed to parse expected JSON. Please confirm the JSON is valid.")))
     }
   }
 
