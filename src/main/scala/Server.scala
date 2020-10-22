@@ -10,7 +10,6 @@ import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.model.MediaTypes._
 import akka.http.scaladsl.server._
-import akka.stream.ActorMaterializer
 import de.heikoseeberger.akkahttpcirce.ErrorAccumulatingCirceSupport._
 import io.circe._
 import io.circe.optics.JsonPath._
@@ -23,7 +22,6 @@ import sangria.slowlog.SlowLog
 
 object Server extends App with CorsSupport {
   implicit val system = ActorSystem("sangria-server")
-  implicit val materializer = ActorMaterializer()
 
   import system.dispatcher
 
@@ -108,5 +106,7 @@ object Server extends App with CorsSupport {
       redirect("/graphql", PermanentRedirect)
     }
 
-  Http().bindAndHandle(corsHandler(route), "0.0.0.0", sys.props.get("http.port").fold(8080)(_.toInt))
+  val PORT = sys.props.get("http.port").fold(8080)(_.toInt)
+  val INTERFACE = "0.0.0.0"
+  Http().newServerAt(INTERFACE, PORT).bindFlow(corsHandler(route))
 }
