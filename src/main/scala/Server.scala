@@ -63,7 +63,7 @@ object Server extends App with CorsSupport {
           explicitlyAccepts(`text/html`) {
             getFromResource("assets/playground.html")
           } ~
-          parameters('query, 'operationName.?, 'variables.?) { (query, operationName, variables) =>
+          parameters(Symbol("query"), Symbol("operationName").?, Symbol("variables").?) { (query, operationName, variables) =>
             QueryParser.parse(query) match {
               case Success(ast) =>
                 variables.map(parse) match {
@@ -76,7 +76,7 @@ object Server extends App with CorsSupport {
           }
         } ~
         post {
-          parameters('query.?, 'operationName.?, 'variables.?) { (queryParam, operationNameParam, variablesParam) =>
+          parameters(Symbol("query").?, Symbol("operationName").?, Symbol("variables").?) { (queryParam, operationNameParam, variablesParam) =>
             entity(as[Json]) { body =>
               val query = queryParam orElse root.query.string.getOption(body)
               val operationName = operationNameParam orElse root.operationName.string.getOption(body)
