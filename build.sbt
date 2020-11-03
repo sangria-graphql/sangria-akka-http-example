@@ -15,6 +15,9 @@ libraryDependencies ++= Seq(
   "org.sangria-graphql" %% "sangria-slowlog" % sangriaVersion,
   "org.sangria-graphql" %% "sangria-circe" % "1.3.1",
 
+  "org.apache.logging.log4j" %% "log4j-api-scala" % "12.0",
+  "org.apache.logging.log4j" % "log4j-core" % "2.13.0" % Runtime,
+
   "com.typesafe.akka" %% "akka-http" % "10.2.1",
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-stream" % akkaVersion,
