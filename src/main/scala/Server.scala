@@ -1,31 +1,35 @@
+import scala.concurrent.duration._
+import scala.util.control.NonFatal
+import scala.util.{Failure, Success}
+
 import sangria.ast.Document
 import sangria.execution.deferred.DeferredResolver
 import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError}
 import sangria.parser.{QueryParser, SyntaxError}
 import sangria.parser.DeliveryScheme.Try
-import sangria.marshalling.circe._
+import sangria.slowlog.SlowLog
+
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.model.MediaTypes._
 import akka.http.scaladsl.server._
-import de.heikoseeberger.akkahttpcirce.ErrorAccumulatingCirceSupport._
-import io.circe._
+
 import io.circe.optics.JsonPath._
+import io.circe.Json
 import io.circe.parser._
+import de.heikoseeberger.akkahttpcirce.ErrorAccumulatingCirceSupport.{jsonMarshaller, jsonUnmarshaller}
+import sangria.marshalling.circe._
 
-import scala.util.control.NonFatal
-import scala.util.{Failure, Success}
 import GraphQLRequestUnmarshaller._
-import sangria.slowlog.SlowLog
 
-object Server extends App with CorsSupport {
+object Server extends App with CorsSupport with PrettyLogging {
   implicit val system = ActorSystem("sangria-server")
 
   import system.dispatcher
 
-  def executeGraphQL(query: Document, operationName: Option[String], variables: Json, tracing: Boolean) =
+  def executeGraphQL(query: Document, operationName: Option[String], variables: Json, tracing: Boolean): StandardRoute =
     complete(Executor.execute(SchemaDefinition.StarWarsSchema, query, new CharacterRepo,
       variables = if (variables.isNull) Json.obj() else variables,
       operationName = operationName,
@@ -108,5 +112,17 @@ object Server extends App with CorsSupport {
 
   val PORT = sys.props.get("http.port").fold(8080)(_.toInt)
   val INTERFACE = "0.0.0.0"
-  Http().newServerAt(INTERFACE, PORT).bindFlow(corsHandler(route))
+  val binding = Http().newServerAt(INTERFACE, PORT)
+    .bindFlow(corsHandler(route))
+
+
+  binding.foreach { http => {
+    val localAddr = http.localAddress
+    val addr = localAddr.getHostName
+    val boundPort = localAddr.getPort.toString
+
+    boxedLogger(
+      s"""🚀 ${yellow("Starting server on")} $addr:${magenta(boundPort)}"""
+    )
+  }}
 }
