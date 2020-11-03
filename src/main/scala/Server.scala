@@ -114,12 +114,15 @@ object Server extends App with CorsSupport with PrettyLogging {
   val INTERFACE = "0.0.0.0"
   val binding = Http().newServerAt(INTERFACE, PORT)
     .bindFlow(corsHandler(route))
+    .map(_.addToCoordinatedShutdown(hardTerminationDeadline = 30.seconds))
 
 
   binding.foreach { http => {
     val localAddr = http.localAddress
     val addr = localAddr.getHostName
     val boundPort = localAddr.getPort.toString
+
+    http.addToCoordinatedShutdown(hardTerminationDeadline = 30.seconds)
 
     boxedLogger(
       s"""🚀 ${yellow("Starting server on")} $addr:${magenta(boundPort)}"""
