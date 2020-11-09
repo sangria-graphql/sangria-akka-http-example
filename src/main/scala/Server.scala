@@ -1,21 +1,18 @@
-import scala.concurrent.duration._
 import scala.util.{Failure, Success}
-
 import sangria.execution.deferred.DeferredResolver
 import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError}
 import sangria.slowlog.SlowLog
-
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
-
+import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import io.circe.Json
-import de.heikoseeberger.akkahttpcirce.ErrorAccumulatingCirceSupport.jsonMarshaller
+import sangria.http.akka.GraphQLRequest
+import sangria.http.akka.SangriaAkkaHttp._
 import sangria.marshalling.circe._
-
-import SangriaAkkaHttp._
+import sangria.http.circe.CirceHttpSupport._
 
 object Server extends App with CorsSupport {
   implicit val system = ActorSystem("sangria-server")
@@ -26,7 +23,7 @@ object Server extends App with CorsSupport {
     optionalHeaderValueByName("X-Apollo-Tracing") { tracing =>
       path("graphql") {
         graphQLPlayground ~
-        prepareGraphQLRequest {
+        prepareGraphQLRequest[Json] {
           case Success(GraphQLRequest(query, variables, operationName)) =>
             val middleware = if (tracing.isDefined) SlowLog.apolloTracing :: Nil else Nil
             val deferredResolver = DeferredResolver.fetchers(SchemaDefinition.characters)

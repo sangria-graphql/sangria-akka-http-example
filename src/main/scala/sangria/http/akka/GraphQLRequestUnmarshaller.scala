@@ -1,13 +1,14 @@
+package sangria.http.akka
+
 import java.nio.charset.Charset
 
 import akka.http.scaladsl.marshalling.{Marshaller, ToEntityMarshaller}
-import akka.http.scaladsl.model._
-import akka.http.scaladsl.server._
-import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.model.headers.Accept
+import akka.http.scaladsl.model._
+import akka.http.scaladsl.server.Directive0
+import akka.http.scaladsl.server.Directives.{headerValuePF, pass}
 import akka.http.scaladsl.unmarshalling.{FromEntityUnmarshaller, Unmarshaller}
 import akka.util.ByteString
-
 import sangria.ast.Document
 import sangria.parser.QueryParser
 import sangria.renderer.{QueryRenderer, QueryRendererConfig}
@@ -16,11 +17,6 @@ import scala.collection.immutable.Seq
 
 object GraphQLRequestUnmarshaller {
   val `application/graphql` = MediaType.applicationWithFixedCharset("graphql", HttpCharsets.`UTF-8`, "graphql")
-
-  def explicitlyAccepts(mediaType: MediaType): Directive0 =
-    headerValuePF {
-      case Accept(ranges) if ranges.exists(range => !range.isWildcard && range.matches(mediaType)) => ranges
-    }.flatMap(_ => pass)
 
   def unmarshallerContentTypes: Seq[ContentTypeRange] =
     mediaTypes.map(ContentTypeRange.apply)
