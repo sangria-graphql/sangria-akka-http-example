@@ -1,25 +1,19 @@
-import scala.concurrent.duration._
 import scala.util.{Failure, Success}
-
 import sangria.execution.deferred.DeferredResolver
 import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError}
 import sangria.slowlog.SlowLog
-
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
-
-import io.circe.Json
-import de.heikoseeberger.akkahttpcirce.ErrorAccumulatingCirceSupport.jsonMarshaller
 import sangria.marshalling.circe._
 
-import SangriaAkkaHttp._
+// This is the trait that makes `graphQLPlayground and prepareGraphQLRequest` available
+import sangria.http.akka.circe.CirceHttpSupport
 
-object Server extends App with CorsSupport {
+object Server extends App with CorsSupport with CirceHttpSupport {
   implicit val system = ActorSystem("sangria-server")
-
   import system.dispatcher
 
   val route: Route =
@@ -27,15 +21,15 @@ object Server extends App with CorsSupport {
       path("graphql") {
         graphQLPlayground ~
         prepareGraphQLRequest {
-          case Success(GraphQLRequest(query, variables, operationName)) =>
+          case Success(req) =>
             val middleware = if (tracing.isDefined) SlowLog.apolloTracing :: Nil else Nil
             val deferredResolver = DeferredResolver.fetchers(SchemaDefinition.characters)
             val graphQLResponse = Executor.execute(
                 schema = SchemaDefinition.StarWarsSchema,
-                queryAst = query,
+                queryAst = req.query,
                 userContext = new CharacterRepo,
-                variables = variables,
-                operationName = operationName,
+                variables = req.variables,
+                operationName = req.operationName,
                 middleware = middleware,
                 deferredResolver = deferredResolver
               ).map(OK -> _)

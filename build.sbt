@@ -9,11 +9,15 @@ scalacOptions ++= Seq("-deprecation", "-feature")
 val akkaVersion = "2.6.10"
 val circeVersion = "0.13.0"
 val sangriaVersion = "2.0.1"
+val sangriaAkkaHttpVersion = "0.0.2"
 
 libraryDependencies ++= Seq(
   "org.sangria-graphql" %% "sangria" % sangriaVersion,
   "org.sangria-graphql" %% "sangria-slowlog" % sangriaVersion,
   "org.sangria-graphql" %% "sangria-circe" % "1.3.1",
+
+  "org.sangria-graphql" %% "sangria-akka-http-core" % sangriaAkkaHttpVersion,
+  "org.sangria-graphql" %% "sangria-akka-http-circe" % sangriaAkkaHttpVersion,
 
   "com.typesafe.akka" %% "akka-http" % "10.2.1",
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
