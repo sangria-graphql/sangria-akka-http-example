@@ -3,8 +3,8 @@ version := "0.1.0-SNAPSHOT"
 
 description := "An example GraphQL server written with akka-http, circe and sangria."
 
-scalaVersion := "2.13.5"
-scalacOptions ++= Seq("-deprecation", "-feature")
+scalaVersion := "2.13.6"
+scalacOptions ++= Seq("-deprecation", "-feature", "-Xsource:3")
 
 val akkaVersion = "2.6.14"
 val circeVersion = "0.13.0"
