@@ -13,7 +13,7 @@ import sangria.marshalling.circe._
 import sangria.http.akka.circe.CirceHttpSupport
 
 object Server extends App with CorsSupport with CirceHttpSupport {
-  implicit val system = ActorSystem("sangria-server")
+  implicit val system: ActorSystem = ActorSystem("sangria-server")
   import system.dispatcher
 
   val route: Route =

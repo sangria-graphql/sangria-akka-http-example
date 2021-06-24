@@ -5,13 +5,12 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{Directive0, Route}
 
 trait CorsSupport {
-  private def addAccessControlHeaders: Directive0 = {
+  private def addAccessControlHeaders: Directive0 =
     respondWithHeaders(
       `Access-Control-Allow-Origin`.*,
       `Access-Control-Allow-Credentials`(true),
       `Access-Control-Allow-Headers`("Authorization", "Content-Type", "X-Requested-With")
     )
-  }
 
   private def preflightRequestHandler: Route = options {
     complete(HttpResponse(StatusCodes.OK)
@@ -21,7 +20,7 @@ trait CorsSupport {
     )
   }
 
-  def corsHandler(r: Route) = addAccessControlHeaders {
+  def corsHandler(r: Route): Route = addAccessControlHeaders {
     preflightRequestHandler ~ r
   }
 }

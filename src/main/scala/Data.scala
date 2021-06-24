@@ -26,16 +26,16 @@ case class Droid(
 class CharacterRepo {
   import CharacterRepo._
 
-  def getHero(episode: Option[Episode.Value]) =
+  def getHero(episode: Option[Episode.Value]): Character =
     episode flatMap (_ => getHuman("1000")) getOrElse droids.last
 
   def getHuman(id: String): Option[Human] = humans.find(c => c.id == id)
 
   def getDroid(id: String): Option[Droid] = droids.find(c => c.id == id)
   
-  def getHumans(limit: Int, offset: Int): List[Human] = humans.drop(offset).take(limit)
+  def getHumans(limit: Int, offset: Int): List[Human] = humans.slice(offset, offset + limit)
   
-  def getDroids(limit: Int, offset: Int): List[Droid] = droids.drop(offset).take(limit)
+  def getDroids(limit: Int, offset: Int): List[Droid] = droids.slice(offset, offset + limit)
 }
 
 object CharacterRepo {

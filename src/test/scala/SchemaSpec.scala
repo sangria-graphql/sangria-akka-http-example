@@ -12,6 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import SchemaDefinition.StarWarsSchema
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import sangria.marshalling.circe.CirceResultMarshaller.Node
 
 class SchemaSpec extends AnyWordSpec with Matchers {
   "StartWars Schema" should {
@@ -78,7 +79,7 @@ class SchemaSpec extends AnyWordSpec with Matchers {
     }
   }
 
-  def executeQuery(query: Document, vars: Json = Json.obj()) = {
+  def executeQuery(query: Document, vars: Json = Json.obj()): Node = {
     val futureResult = Executor.execute(StarWarsSchema, query,
       variables = vars,
       userContext = new CharacterRepo,
