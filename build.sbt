@@ -6,14 +6,14 @@ description := "An example GraphQL server written with akka-http, circe and sang
 scalaVersion := "2.13.6"
 scalacOptions ++= Seq("-deprecation", "-feature", "-Xsource:3")
 
-val akkaVersion = "2.6.14"
-val circeVersion = "0.13.0"
+val akkaVersion = "2.6.15"
+val circeVersion = "0.14.1"
 val sangriaAkkaHttpVersion = "0.0.2"
 
 libraryDependencies ++= Seq(
   "org.sangria-graphql" %% "sangria" % "2.1.3",
-  "org.sangria-graphql" %% "sangria-slowlog" % "2.0.1",
-  "org.sangria-graphql" %% "sangria-circe" % "1.3.1",
+  "org.sangria-graphql" %% "sangria-slowlog" % "2.0.2",
+  "org.sangria-graphql" %% "sangria-circe" % "1.3.2",
 
   "org.sangria-graphql" %% "sangria-akka-http-core" % sangriaAkkaHttpVersion,
   "org.sangria-graphql" %% "sangria-akka-http-circe" % sangriaAkkaHttpVersion,
@@ -27,7 +27,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-optics" % circeVersion,
   
-  "org.scalatest" %% "scalatest" % "3.2.8" % Test
+  "org.scalatest" %% "scalatest" % "3.2.9" % Test
 )
 
 Revolver.settings
