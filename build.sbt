@@ -3,7 +3,10 @@ version := "0.1.0-SNAPSHOT"
 
 description := "An example GraphQL server written with akka-http, circe and sangria."
 
-scalaVersion := "2.13.6"
+ThisBuild / crossScalaVersions := Seq("2.13.6")
+ThisBuild / scalaVersion := crossScalaVersions.value.last
+ThisBuild / githubWorkflowPublishTargetBranches := List()
+
 scalacOptions ++= Seq("-deprecation", "-feature", "-Xsource:3")
 
 val akkaVersion = "2.6.15"
