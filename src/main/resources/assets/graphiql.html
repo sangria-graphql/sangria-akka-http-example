@@ -1,0 +1,43 @@
+<!-- Based on https://github.com/graphql/graphiql/blob/8ac05f8b141b6f5cb4449c62ad67a34115490ac8/examples/graphiql-cdn/index.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GraphiQL</title>
+    <style>
+      body {
+        height: 100%; width: 100%;
+        margin: 0;
+        overflow: hidden;
+      }
+      #graphiql { height: 100vh; }
+    </style>
+    <script src="umd/react.production.min.js"></script>
+    <script src="umd/react-dom.production.min.js"></script>
+    <link href="graphiql.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="graphiql">Loading...</div>
+    <script src="graphiql.min.js"></script>
+    <script>
+      function graphQLFetcher(graphQLParams) {
+        return fetch('graphql', {
+          method: 'post',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(graphQLParams),
+          credentials: 'omit',
+        }).then(response => response.json().catch(() => response.text()));
+      }
+
+      ReactDOM.render(
+        React.createElement(GraphiQL, {
+          fetcher: graphQLFetcher,
+          defaultVariableEditorOpen: true,
+        }),
+        document.getElementById('graphiql'),
+      );
+    </script>
+  </body>
+</html>
