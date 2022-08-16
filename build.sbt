@@ -30,7 +30,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-optics" % circeVersion,
   
-  "org.scalatest" %% "scalatest" % "3.2.9" % Test
+  "org.scalatest" %% "scalatest" % "3.2.13" % Test
 )
 
 Revolver.settings
