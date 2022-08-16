@@ -21,7 +21,7 @@ libraryDependencies ++= Seq(
   "org.sangria-graphql" %% "sangria-akka-http-core" % sangriaAkkaHttpVersion,
   "org.sangria-graphql" %% "sangria-akka-http-circe" % sangriaAkkaHttpVersion,
 
-  "com.typesafe.akka" %% "akka-http" % "10.2.4",
+  "com.typesafe.akka" %% "akka-http" % "10.2.9",
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-stream" % akkaVersion,
   "de.heikoseeberger" %% "akka-http-circe" % "1.36.0",
