@@ -14,7 +14,7 @@ val circeVersion = "0.14.1"
 val sangriaAkkaHttpVersion = "0.0.2"
 
 libraryDependencies ++= Seq(
-  "org.sangria-graphql" %% "sangria" % "2.1.3",
+  "org.sangria-graphql" %% "sangria" % "2.1.6",
   "org.sangria-graphql" %% "sangria-slowlog" % "2.0.2",
   "org.sangria-graphql" %% "sangria-circe" % "1.3.2",
 
