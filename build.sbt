@@ -10,7 +10,8 @@ ThisBuild / githubWorkflowPublishTargetBranches := List()
 scalacOptions ++= Seq("-deprecation", "-feature", "-Xsource:3")
 
 val akkaVersion = "2.6.19"
-val circeVersion = "0.14.1"
+val circeVersion = "0.14.2"
+val circeOpticsVersion = "0.14.1"
 val sangriaAkkaHttpVersion = "0.0.2"
 
 libraryDependencies ++= Seq(
@@ -28,8 +29,8 @@ libraryDependencies ++= Seq(
 
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "io.circe" %% "circe-optics" % circeVersion,
-  
+  "io.circe" %% "circe-optics" % circeOpticsVersion,
+
   "org.scalatest" %% "scalatest" % "3.2.13" % Test
 )
 
