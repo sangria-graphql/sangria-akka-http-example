@@ -3,7 +3,7 @@ version := "0.1.0-SNAPSHOT"
 
 description := "An example GraphQL server written with akka-http, circe and sangria."
 
-ThisBuild / crossScalaVersions := Seq("2.13.8")
+ThisBuild / crossScalaVersions := Seq("2.13.10")
 ThisBuild / scalaVersion := crossScalaVersions.value.last
 ThisBuild / githubWorkflowPublishTargetBranches := List()
 
@@ -16,7 +16,7 @@ val sangriaAkkaHttpVersion = "0.0.3"
 
 libraryDependencies ++= Seq(
   "org.sangria-graphql" %% "sangria" % "3.4.0",
-  "org.sangria-graphql" %% "sangria-slowlog" % "2.0.4",
+  "org.sangria-graphql" %% "sangria-slowlog" % "2.0.5",
   "org.sangria-graphql" %% "sangria-circe" % "1.3.2",
 
   "org.sangria-graphql" %% "sangria-akka-http-core" % sangriaAkkaHttpVersion,
@@ -31,7 +31,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-optics" % circeOpticsVersion,
 
-  "org.scalatest" %% "scalatest" % "3.2.13" % Test
+  "org.scalatest" %% "scalatest" % "3.2.14" % Test
 )
 
 Revolver.settings
