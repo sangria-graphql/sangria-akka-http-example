@@ -12,11 +12,11 @@ scalacOptions ++= Seq("-deprecation", "-feature", "-Xsource:3")
 val akkaVersion = "2.6.20"
 val circeVersion = "0.14.5"
 val circeOpticsVersion = "0.14.1"
-val sangriaAkkaHttpVersion = "0.0.3"
+val sangriaAkkaHttpVersion = "0.0.4"
 
 libraryDependencies ++= Seq(
-  "org.sangria-graphql" %% "sangria" % "3.5.3",
-  "org.sangria-graphql" %% "sangria-slowlog" % "2.0.5",
+  "org.sangria-graphql" %% "sangria" % "4.0.0",
+  "org.sangria-graphql" %% "sangria-slowlog" % "3.0.0",
   "org.sangria-graphql" %% "sangria-circe" % "1.3.2",
 
   "org.sangria-graphql" %% "sangria-akka-http-core" % sangriaAkkaHttpVersion,
@@ -31,7 +31,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-optics" % circeOpticsVersion,
 
-  "org.scalatest" %% "scalatest" % "3.2.15" % Test
+  "org.scalatest" %% "scalatest" % "3.2.16" % Test
 )
 
 Revolver.settings
