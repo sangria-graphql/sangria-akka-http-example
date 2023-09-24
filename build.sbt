@@ -11,7 +11,7 @@ scalacOptions ++= Seq("-deprecation", "-feature", "-Xsource:3")
 
 val akkaVersion = "2.6.20"
 val circeVersion = "0.14.5"
-val circeOpticsVersion = "0.14.1"
+val circeOpticsVersion = "0.15.0"
 val sangriaAkkaHttpVersion = "0.0.4"
 
 libraryDependencies ++= Seq(
