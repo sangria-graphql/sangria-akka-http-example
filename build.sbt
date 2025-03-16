@@ -3,7 +3,7 @@ version := "0.1.0-SNAPSHOT"
 
 description := "An example GraphQL server written with akka-http, circe and sangria."
 
-ThisBuild / crossScalaVersions := Seq("2.13.15")
+ThisBuild / crossScalaVersions := Seq("2.13.16")
 ThisBuild / scalaVersion := crossScalaVersions.value.last
 ThisBuild / githubWorkflowPublishTargetBranches := List()
 
@@ -15,7 +15,7 @@ val circeOpticsVersion = "0.15.0"
 val sangriaAkkaHttpVersion = "0.0.4"
 
 libraryDependencies ++= Seq(
-  "org.sangria-graphql" %% "sangria" % "4.2.4",
+  "org.sangria-graphql" %% "sangria" % "4.2.5",
   "org.sangria-graphql" %% "sangria-slowlog" % "3.0.0",
   "org.sangria-graphql" %% "sangria-circe" % "1.3.2",
 
