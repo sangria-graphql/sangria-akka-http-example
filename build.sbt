@@ -10,12 +10,12 @@ ThisBuild / githubWorkflowPublishTargetBranches := List()
 scalacOptions ++= Seq("-deprecation", "-feature", "-Xsource:3")
 
 val akkaVersion = "2.6.20"
-val circeVersion = "0.14.13"
+val circeVersion = "0.14.14"
 val circeOpticsVersion = "0.15.1"
 val sangriaAkkaHttpVersion = "0.0.4"
 
 libraryDependencies ++= Seq(
-  "org.sangria-graphql" %% "sangria" % "4.2.6",
+  "org.sangria-graphql" %% "sangria" % "4.2.10",
   "org.sangria-graphql" %% "sangria-slowlog" % "3.0.0",
   "org.sangria-graphql" %% "sangria-circe" % "1.3.2",
 
