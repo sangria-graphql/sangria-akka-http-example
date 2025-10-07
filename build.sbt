@@ -3,7 +3,7 @@ version := "0.1.0-SNAPSHOT"
 
 description := "An example GraphQL server written with akka-http, circe and sangria."
 
-ThisBuild / crossScalaVersions := Seq("2.13.16")
+ThisBuild / crossScalaVersions := Seq("2.13.17")
 ThisBuild / scalaVersion := crossScalaVersions.value.last
 ThisBuild / githubWorkflowPublishTargetBranches := List()
 
