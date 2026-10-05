@@ -16,7 +16,7 @@ val sangriaAkkaHttpVersion = "0.0.4"
 
 libraryDependencies ++= Seq(
   "org.sangria-graphql" %% "sangria" % "4.2.15",
-  "org.sangria-graphql" %% "sangria-slowlog" % "3.0.0",
+  "org.sangria-graphql" %% "sangria-slowlog" % "3.0.1",
   "org.sangria-graphql" %% "sangria-circe" % "1.3.2",
 
   "org.sangria-graphql" %% "sangria-akka-http-core" % sangriaAkkaHttpVersion,
